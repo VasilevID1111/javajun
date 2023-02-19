@@ -4,6 +4,8 @@ import com.example.javajun.model.Person;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class PersonService {
@@ -18,8 +20,9 @@ public class PersonService {
         return person;
     }
 
-    public String getPersonAll() {
-        return null;
+    public List<Person> getPersonAll() {
+        List<Person> people = personRepository.getPersonAll();
+        return people;
     }
 
     public void addPerson(Person person) {

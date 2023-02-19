@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController("/person")
 @AllArgsConstructor
@@ -18,7 +20,7 @@ public class PersonController {
     }
 
     @GetMapping("/all")
-    public String getPersons(){
+    public List<Person> getPersons(){
         return personService.getPersonAll();
     }
 
