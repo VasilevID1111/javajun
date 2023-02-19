@@ -24,14 +24,18 @@ public class PersonController {
         return personService.getPersonAll();
     }
 
-    @PostMapping("/add-person")
-    public void addPerson(@RequestBody Person person){
-        personService.addPerson(person);
+    @PostMapping(value = "/add-person", consumes = {"application/json"})
+    public String addPerson(@RequestBody Person person) {
+        return personService.addPerson(person);
+    }
+
+    @PostMapping( "/delete/{personID}")
+    public String deletePerson(@PathVariable int personID) {
+        return personService.deletePerson(personID);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public String handle(IllegalArgumentException e){
-        log.error(e.getMessage());
         return "Что-то пошло не так";
     }
 }

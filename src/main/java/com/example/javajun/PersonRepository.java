@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public class PersonRepository {
+    // не разобрался еще, как сделать соединение через application.properties, пока оставил так
     private static final String URL = "jdbc:postgresql://localhost:5432/person";
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "123";
@@ -30,7 +31,7 @@ public class PersonRepository {
 
         Statement statement;
         try {
-            statement = connection.createStatement();
+            statement = connection.createStatement();         //sql-иньекции поправлю позже
             ResultSet resultSet = statement.executeQuery("SELECT * FROM person WHERE person.\"personId\"="+personID);
             resultSet.next();
             person.setPersonId(resultSet.getInt("personId"));
@@ -39,7 +40,7 @@ public class PersonRepository {
             person.setFio(resultSet.getString("fio"));
             person.setAlive(resultSet.getBoolean("isAlive"));
         } catch (SQLException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(); //написать собственные ошибки
         }
         return person;
     }
@@ -64,8 +65,38 @@ public class PersonRepository {
                 people.add(person);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e); //написать собственные ошибки
         }
         return people;
+    }
+
+    public boolean savePerson(Person person) {
+        Statement statement;
+        int updatedRows = 0;
+        try {
+            statement = connection.createStatement();
+            updatedRows = statement.executeUpdate("INSERT INTO person VALUES("+person.getPersonId() +
+                    ",'" + person.getFio() + "','" + person.getBirthday() + "'," + person.isAlive() + ",'" +
+                    person.getTown() + "')"); //sql-иньекции поправлю позже
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e); //написать собственные ошибки
+        }
+        if (updatedRows > 0)
+            return true;
+        return false;
+    }
+
+    public boolean deletePerson(int personID) {
+        Statement statement;
+        int updatedRows = 0;
+        try {
+            statement = connection.createStatement();    //sql-иньекции поправлю позже
+            updatedRows = statement.executeUpdate("DELETE FROM person WHERE person.\"personId\"=" + personID);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e); //написать собственные ошибки
+        }
+        if (updatedRows > 0)
+            return true;
+        return false;
     }
 }
