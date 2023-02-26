@@ -19,12 +19,12 @@ public class PersonController {
         return personService.getPerson(personID);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public @ResponseBody Iterable<PersonDTO> getPersons(){
         return personService.getPersonAll();
     }
 
-    @PostMapping(consumes = {"application/json"})
+    @PostMapping(name = "/", consumes = {"application/json"})
     public String addPerson(@RequestBody PersonDTO personDTO) {
         return personService.addPerson(personDTO);
     }
