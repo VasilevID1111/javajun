@@ -3,24 +3,27 @@ package com.example.javajun;
 import com.example.javajun.model.Person;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
-@RestController("/person")
+@RequestMapping(path="/person")
+@RestController
 @AllArgsConstructor
 public class PersonController {
 
+    @Autowired
     private final PersonService personService;
 
     @GetMapping("/{personID}")
-    public Person getPerson(@PathVariable int personID){
+    public Person getPerson(@PathVariable Integer personID){
         return personService.getPerson(personID);
     }
 
     @GetMapping("/all")
-    public List<Person> getPersons(){
+    public @ResponseBody Iterable<Person> getPersons(){
         return personService.getPersonAll();
     }
 
@@ -30,7 +33,7 @@ public class PersonController {
     }
 
     @PostMapping( "/delete/{personID}")
-    public String deletePerson(@PathVariable int personID) {
+    public String deletePerson(@PathVariable Integer personID) {
         return personService.deletePerson(personID);
     }
 
