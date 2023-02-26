@@ -1,4 +1,4 @@
-package com.example.javajun.model;
+package com.example.javajun.person;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,10 +8,9 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "person")
-public class Person {
+public class PersonDTO {
     @Id
     @Column(name = "personid")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer personId;
 
     @Column(name = "fio")

@@ -1,11 +1,10 @@
-package com.example.javajun;
+package com.example.javajun.person;
 
-import com.example.javajun.model.Person;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,10 +12,10 @@ import java.util.Optional;
 public class PersonService {
 
     @Autowired
-    private PersonRepo personRepo;
+    private PersonDAO personDAO;
 
-    public Person getPerson(Integer personID) {
-        Optional<Person> person = personRepo.findById(personID);
+    public PersonDTO getPerson(Integer personID) {
+        Optional<PersonDTO> person = personDAO.findById(personID);
         if (person.isPresent()) {
             return person.get();
         } else {
@@ -24,21 +23,23 @@ public class PersonService {
         }
     }
 
-    public Iterable<Person> getPersonAll() {
-        return personRepo.findAll();
+    public Iterable<PersonDTO> getPersonAll() {
+        return personDAO.findAll();
     }
 
-    public String addPerson(Person person) {
-        personRepo.save(person);
-        if (person.getPersonId() == 0) {
+    @Transactional
+    public String addPerson(PersonDTO personDTO) {
+        personDAO.save(personDTO);
+        if (personDTO.getPersonId() == 0) {
             throw new IllegalArgumentException();
         }
-        return "Успешно добавлен person с именем: " + person.getFio();
+        return "Успешно добавлен person с именем: " + personDTO.getFio();
     }
 
+    @Transactional
     public String deletePerson(Integer personID) {
-        personRepo.deleteById(personID);
-        if (personRepo.existsById(personID)) {
+        personDAO.deleteById(personID);
+        if (personDAO.existsById(personID)) {
             throw new IllegalArgumentException();
         }
         return "person c именем c personID" + personID + " удален";

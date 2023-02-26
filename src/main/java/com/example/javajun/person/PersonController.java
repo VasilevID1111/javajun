@@ -1,16 +1,13 @@
-package com.example.javajun;
+package com.example.javajun.person;
 
-import com.example.javajun.model.Person;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
-@RequestMapping(path="/person")
 @RestController
+@RequestMapping("/persons")
 @AllArgsConstructor
 public class PersonController {
 
@@ -18,21 +15,21 @@ public class PersonController {
     private final PersonService personService;
 
     @GetMapping("/{personID}")
-    public Person getPerson(@PathVariable Integer personID){
+    public PersonDTO getPerson(@PathVariable Integer personID){
         return personService.getPerson(personID);
     }
 
     @GetMapping("/all")
-    public @ResponseBody Iterable<Person> getPersons(){
+    public @ResponseBody Iterable<PersonDTO> getPersons(){
         return personService.getPersonAll();
     }
 
-    @PostMapping(value = "/add-person", consumes = {"application/json"})
-    public String addPerson(@RequestBody Person person) {
-        return personService.addPerson(person);
+    @PostMapping(consumes = {"application/json"})
+    public String addPerson(@RequestBody PersonDTO personDTO) {
+        return personService.addPerson(personDTO);
     }
 
-    @PostMapping( "/delete/{personID}")
+    @DeleteMapping ( "/{personID}")
     public String deletePerson(@PathVariable Integer personID) {
         return personService.deletePerson(personID);
     }
